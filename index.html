@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('./400076.jpg') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Ensure the background image covers the entire screen */
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            backdrop-filter: blur(10px); /* Optional: adds a frosted glass effect */
+            position: relative; /* Ensure it is above the video */
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        form {
+            display: grid;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        input:focus, textarea:focus {
+            border-color: #007bff; /* Blue border on focus */
+            background-color: #e9f5ff; /* Light blue background on focus */
+        }
+        input.filled, textarea.filled {
+            color: #007bff; /* Blue text color for filled fields */
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #qrcode {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #qrcode canvas {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        #qrcode canvas:hover {
+            transform: scale(1.05);
+        }
+        #downloadButton {
+            display: block;
+            margin: 20px auto 0;
+            text-align: center;
+        }
+        #downloadButton a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #007bff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        #downloadButton a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator</h1>
+        <form id="dataForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter username">
+            
+            <label for="department">Department:</label>
+            <input type="text" id="department" placeholder="Enter department">
+            
+            <label for="hostname">Hostname:</label>
+            <input type="text" id="hostname" placeholder="Enter hostname">
+            
+            <label for="make">Make:</label>
+            <input type="text" id="make" placeholder="Enter make">
+            
+            <label for="model">Model:</label>
+            <input type="text" id="model" placeholder="Enter model">
+            
+            <label for="modelNumber">Model Number:</label>
+            <input type="text" id="modelNumber" placeholder="Enter model number">
+            
+            <label for="monitorServiceTag">Monitor Service Tag:</label>
+            <input type="text" id="monitorServiceTag" placeholder="Enter monitor service tag">
+            
+            <label for="pcServiceTag">Service Tag:</label>
+            <input type="text" id="pcServiceTag" placeholder="Enter PC service tag">
+            
+            <label for="os">OS:</label>
+            <input type="text" id="os" placeholder="Enter OS">
+            
+            <label for="processor">Processor:</label>
+            <input type="text" id="processor" placeholder="Enter processor">
+            
+            <label for="ram">RAM:</label>
+            <input type="text" id="ram" placeholder="Enter RAM">
+            
+            <label for="rom">ROM:</label>
+            <input type="text" id="rom" placeholder="Enter ROM">
+            
+            <label for="office">Office:</label>
+            <input type="text" id="office" placeholder="Enter office">
+            
+            <label for="officeId">Office ID:</label>
+            <input type="email" id="officeId" placeholder="Enter office ID">
+            
+            <label for="otherSoftware">Other Software:</label>
+            <textarea id="otherSoftware" rows="4" placeholder="Enter other software"></textarea>
+            
+            <label for="hoDate">H/O Date:</label>
+            <input type="date" id="hoDate">
+            
+            <label for="vendor">Vendor:</label>
+            <input type="text" id="vendor" placeholder="Enter vendor">
+            
+            <label for="purchaseDate">Purchase Date:</label>
+            <input type="date" id="purchaseDate">
+            
+            <label for="ownRental">Own/Rental:</label>
+            <input type="text" id="ownRental" placeholder="Enter own or rental">
+            
+            <label for="rentalPhase">Rental Phase:</label>
+            <input type="text" id="rentalPhase" placeholder="Enter rental phase">
+            
+            <label for="location">Location:</label>
+            <input type="text" id="location" placeholder="Enter location">
+            
+            <label for="warranty">Warranty:</label>
+            <input type="date" id="warranty">
+            
+            <label for="otherAccessories">Other Accessories:</label>
+            <textarea id="otherAccessories" rows="4" placeholder="Enter other accessories"></textarea>
+            
+            <label for="deviceType">Device Type:</label>
+            <input type="text" id="deviceType" placeholder="Enter device type">
+            
+            <button type="button" id="generateButton">Generate QR Code</button>
+        </form>
+        
+        <div id="qrcode"></div>
+        <div id="downloadButton" style="display:none;">
+            <a id="downloadLink" download="qrcode.png">Download QR Code</a>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to generate QR code
+            function generateQRCode() {
+                // Gather form data
+                var formData = {
+                    Username: $('#username').val(),
+                    Department: $('#department').val(),
+                    Hostname: $('#hostname').val(),
+                    Make: $('#make').val(),
+                    Model: $('#model').val(),
+                    Model_Number: $('#modelNumber').val(),
+                    Monitor_Service_Tag: $('#monitorServiceTag').val(),
+                    Service_Tag: $('#pcServiceTag').val(),
+                    OS: $('#os').val(),
+                    Processor: $('#processor').val(),
+                    RAM: $('#ram').val(),
+                    ROM: $('#rom').val(),
+                    Office: $('#office').val(),
+                    Office_Id: $('#officeId').val(),
+                    Other_Software: $('#otherSoftware').val(),
+                    Handover_Date: $('#hoDate').val(),
+                    Vendor: $('#vendor').val(),
+                    Purchase_Date: $('#purchaseDate').val(),
+                    Own_or_Rental: $('#ownRental').val(),
+                    Rental_Phase: $('#rentalPhase').val(),
+                    Location: $('#location').val(),
+                    Warranty: $('#warranty').val
